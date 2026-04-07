@@ -1,0 +1,13 @@
+{
+  "name": "braindump-app",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . BrainDump --overwrite --platform=darwin --out=dist"
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-packager": "^17.1.2"
+  }
+}
