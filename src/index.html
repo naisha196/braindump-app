@@ -105,18 +105,8 @@ html, body {
 .app-name { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
 .app-name span { color: var(--accent); }
 .topbar-right { display: flex; align-items: center; gap: 10px; -webkit-app-region: no-drag; }
-.count-badge { font-size: 12px; color: var(--muted); }
-.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0; transition: opacity 0.3s; }
-.sync-dot.active { opacity: 1; animation: pulse 1s ease-in-out infinite; }
-.avatar-btn { width: 28px; height: 28px; border-radius: 50%; background: rgba(201,255,114,0.12); border: 0.5px solid rgba(201,255,114,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; font-weight: 500; color: var(--accent); position: relative; transition: all 0.12s; -webkit-app-region: no-drag; }
-.avatar-btn:hover { background: rgba(201,255,114,0.22); }
-.user-menu { display: none; position: absolute; top: 36px; right: 0; background: var(--surface); border: 0.5px solid var(--border2); border-radius: 10px; padding: 6px; min-width: 170px; z-index: 50; }
-.user-menu.open { display: block; }
-.user-menu-email { font-size: 11px; color: var(--hint); padding: 6px 10px 8px; border-bottom: 0.5px solid var(--border); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-menu-item { display: block; width: 100%; text-align: left; background: transparent; border: none; padding: 7px 10px; font-size: 13px; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; border-radius: 6px; transition: all 0.1s; }
-.user-menu-item:hover { background: var(--surface2); color: var(--text); }
-.user-menu-item.danger { color: #f09595; }
-.user-menu-item.danger:hover { background: rgba(226,75,74,0.1); }
+/* count-badge and sync-dot removed */
+/* avatar/signout removed */
 
 /* ── Filters ── */
 .filter-row { display: flex; gap: 7px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none; flex-shrink: 0; -webkit-app-region: no-drag; }
@@ -128,42 +118,18 @@ html, body {
 /* ── Scroll area ── */
 .scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px 14px 14px; scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   FIX 2 — GRID LAYOUT
-   Problem: CSS grid with mixed wide/narrow cards
-   leaves gaps when a tall card sits next to a
-   short one — the row height locks to the tallest.
-   Fix: use two CSS columns side by side. Narrow
-   cards go into the left or right column naturally.
-   Wide cards (audio/note) span both columns via JS
-   by being placed outside the two-col inner grid.
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* True 2-column masonry — like Pinterest/VSCO
+   Each column is independent so cards flow upward
+   with no gaps regardless of height differences */
 .grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Row holds either one wide card or two narrow cards side by side */
-.grid-row {
   display: flex;
   gap: 10px;
   align-items: flex-start;
 }
-
-/* Wide cards (audio, note, idea) fill the full row */
-.grid-row.row-wide {
+.grid-col {
+  display: flex;
   flex-direction: column;
-}
-
-/* Narrow cards (photo, idea-short) each take half */
-.grid-row.row-pair > .card-wrap {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Single narrow card with nothing beside it */
-.grid-row.row-single > .card-wrap {
+  gap: 10px;
   flex: 1;
   min-width: 0;
 }
@@ -199,8 +165,8 @@ html, body {
 
 .note-body { padding: 13px; min-height: 80px; display: flex; flex-direction: column; justify-content: space-between; }
 .note-text { font-size: 13px; line-height: 1.6; color: var(--text); flex: 1; margin-bottom: 10px; }
-.idea-body { padding: 13px; min-height: 80px; display: flex; flex-direction: column; justify-content: space-between; background: rgba(201,255,114,0.04); }
-.idea-text { font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--accent); flex: 1; margin-bottom: 10px; font-style: italic; }
+.idea-body { padding: 13px; min-height: 80px; display: flex; flex-direction: column; justify-content: space-between; background: rgba(201,255,114,0.08); border-left: 2px solid rgba(201,255,114,0.35); }
+.idea-text { font-size: 13px; font-weight: 400; line-height: 1.6; color: var(--text); flex: 1; margin-bottom: 10px; }
 
 .del-btn { position: absolute; top: 7px; right: 7px; width: 20px; height: 20px; border-radius: 50%; background: rgba(14,14,14,0.8); border: 0.5px solid var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity 0.12s; z-index: 10; }
 .empty { text-align: center; padding: 60px 20px; color: var(--hint); font-size: 14px; line-height: 1.9; }
@@ -292,15 +258,7 @@ html, body {
     <div class="topbar">
       <div class="app-name">brain<span>dump</span></div>
       <div class="topbar-right">
-        <div class="sync-dot" id="sync-dot"></div>
-        <div class="count-badge" id="count-badge">0 ideas</div>
-        <div class="avatar-btn" id="avatar-btn">
-          <span id="avatar-initials">?</span>
-          <div class="user-menu" id="user-menu">
-            <div class="user-menu-email" id="user-email-display"></div>
-            <button class="user-menu-item danger" id="btn-signout">Sign out</button>
-          </div>
-        </div>
+
       </div>
     </div>
 
@@ -432,28 +390,14 @@ document.getElementById('auth-email').addEventListener('keydown', e => { if (e.k
 document.getElementById('auth-password').addEventListener('keydown', e => { if (e.key==='Enter') document.getElementById('btn-signin').click() })
 function setAuthError(msg) { document.getElementById('auth-error').textContent = msg }
 
-document.getElementById('btn-signout').addEventListener('click', async () => {
-  await sb.auth.signOut()
-  ideas = []; currentUser = null
-  localStorage.removeItem(LOCAL_KEY)
-  toggleMenu(false); showScreen('auth')
-})
+/* signout listener removed */
 
 /* ── user menu ── */
-document.getElementById('avatar-btn').addEventListener('click', e => { e.stopPropagation(); toggleMenu() })
-document.addEventListener('click', () => toggleMenu(false))
-function toggleMenu(force) {
-  const m = document.getElementById('user-menu')
-  m.classList.toggle('open', force !== undefined ? force : !m.classList.contains('open'))
-}
-function setUserUI(user) {
-  const email = user.email || user.user_metadata?.email || ''
-  document.getElementById('avatar-initials').textContent = email ? email[0].toUpperCase() : '?'
-  document.getElementById('user-email-display').textContent = email
-}
+function toggleMenu(force) { /* signout removed */ }
+function setUserUI(user) { /* signout removed */ }
 
 /* ── db ── */
-function setSyncing(on) { document.getElementById('sync-dot').classList.toggle('active', on) }
+function setSyncing(on) { /* sync indicator removed */ }
 
 async function loadIdeas() {
   const local = loadLocal()
@@ -691,7 +635,7 @@ function makeCardEl(idea) {
   } else if (idea.type === 'audio') {
     card.innerHTML = `<div class="audio-preview"><button class="play-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="#818cf8"><path d="M8 5v14l11-7z"/></svg></button><div class="wave">${waveHtml()}</div><span class="audio-dur">${fmtDur(idea.duration||0)}</span></div><div class="card-body"><span class="tag tag-audio">Audio</span><div class="card-title">${escHtml(idea.text)}</div><div class="card-time">${idea.time}</div></div>`
   } else if (idea.type === 'idea') {
-    card.innerHTML = `<div class="idea-body"><div class="idea-text">"${escHtml(idea.text)}"</div><div><span class="tag tag-idea">Idea</span><div class="card-time">${idea.time}</div></div></div>`
+    card.innerHTML = `<div class="idea-body"><div class="idea-text">${escHtml(idea.text)}</div><div><span class="tag tag-idea">Idea</span><div class="card-time">${idea.time}</div></div></div>`
   } else {
     card.innerHTML = `<div class="note-body"><div class="note-text">${escHtml(idea.text)}</div><div><span class="tag tag-note">Note</span><div class="card-time">${idea.time}</div></div></div>`
   }
@@ -709,7 +653,7 @@ function makeCardEl(idea) {
 function renderGrid() {
   const filtered = activeFilter === 'all' ? ideas : ideas.filter(i => i.type === activeFilter)
   const grid = document.getElementById('grid')
-  document.getElementById('count-badge').textContent = ideas.length + ' idea' + (ideas.length !== 1 ? 's' : '')
+  // count badge removed
 
   if (filtered.length === 0) {
     grid.innerHTML = `<div class="empty">Nothing here yet.<br>Start dumping your thoughts below.</div>`
@@ -718,36 +662,32 @@ function renderGrid() {
 
   grid.innerHTML = ''
 
-  // Build rows: wide cards get their own row, narrow cards are paired
-  let i = 0
-  while (i < filtered.length) {
-    const idea = filtered[i]
-    const row  = document.createElement('div')
-    row.className = 'grid-row'
+  // True masonry: two independent columns
+  // Cards flow into the shorter column each time — no gaps ever
+  const colL = document.createElement('div'); colL.className = 'grid-col'
+  const colR = document.createElement('div'); colR.className = 'grid-col'
+  grid.appendChild(colL); grid.appendChild(colR)
 
-    if (isWide(idea.type)) {
-      // Wide card — full row on its own
-      row.classList.add('row-wide')
-      row.appendChild(makeCardEl(idea))
-      i++
+  // Track approximate height of each column using card type as proxy
+  let heightL = 0, heightR = 0
+
+  filtered.forEach(idea => {
+    const wrap = makeCardEl(idea)
+    // Estimate card height for column balancing
+    const h = idea.type === 'photo' ? 200
+            : idea.type === 'audio' ? 110
+            : idea.type === 'note'  ? Math.min(40 + idea.text.length * 0.6, 180)
+            : idea.type === 'idea'  ? Math.min(40 + idea.text.length * 0.6, 160)
+            : 120
+
+    if (heightL <= heightR) {
+      colL.appendChild(wrap)
+      heightL += h + 10
     } else {
-      // Narrow card — try to pair with the next narrow card
-      const next = filtered[i + 1]
-      if (next && !isWide(next.type)) {
-        row.classList.add('row-pair')
-        row.appendChild(makeCardEl(idea))
-        row.appendChild(makeCardEl(next))
-        i += 2
-      } else {
-        // Lone narrow card at end
-        row.classList.add('row-single')
-        row.appendChild(makeCardEl(idea))
-        i++
-      }
+      colR.appendChild(wrap)
+      heightR += h + 10
     }
-
-    grid.appendChild(row)
-  }
+  })
 }
 
 /* ── filters ── */
