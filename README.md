@@ -22,16 +22,17 @@ Linking related thoughts into structured concepts
 * Cloud sync across devices
 
 ## To install on you laptop
-* Clone the repository
-git clone https://github.com/your-username/braindump-app.git
-* Navigate into the project on terminal
-cd brain-dump
+* Clone the repository: 
+<span style="color:blue">git clone https://github.com/your-username/braindump-app.git</span>
+* Navigate into the project on terminal:
+<span style="color:blue">cd braindump-app</span>
 * Install dependencies
-npm install
+<span style="color:blue">npm install</span>
 * Preview the app
-npm start
+<span style="color:blue">npm start</span>
 * Build the app
-npm run build
+<span style="color:blue">npm run build</span>
+* After you build you will see a dist folder created inside your project folder and the app will be inside this dist folder.
 
 ## Status
 MVP — actively being improved
