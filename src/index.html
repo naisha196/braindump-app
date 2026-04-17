@@ -3,32 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- Fixed CSP: added blob: to default-src and removed restrictive media-src override -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' blob: data: https://*.supabase.co https://fonts.googleapis.com https://fonts.gstatic.com https://cdn.jsdelivr.net; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.supabase.co; media-src 'self' blob: data: https://*.supabase.co;" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' blob: data: https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob:; media-src 'self' blob: data:;" />
 <title>BrainDump</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   COLOUR SCHEME — edit everything in here
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   --bg           background of the whole app
-   --surface      card and input backgrounds
-   --surface2     slightly lighter surface (hover states)
-   --border       subtle borders
-   --border2      slightly more visible borders
-   --text         primary text colour
-   --muted        secondary / label text
-   --hint         placeholder and timestamp text
-   --accent       highlight colour (buttons, active states)
-   --accent-dark  text colour on top of --accent
-   --audio        audio card accent
-   --photo        photo card accent
-   --note         note card accent
-   --idea         idea card accent
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 :root {
   --bg: #0e0e0e;
   --surface: #1a1a1a;
@@ -78,35 +59,11 @@ html, body {
   position: relative;
 }
 
-/* ── Auth ── */
-.auth-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100dvh; padding: 40px 24px; }
-.auth-logo { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; text-align: center; }
-.auth-logo span { color: var(--accent); }
-.auth-tagline { font-size: 14px; color: var(--muted); margin-bottom: 36px; text-align: center; line-height: 1.7; }
-.auth-card { width: 100%; max-width: 360px; background: var(--surface); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; gap: 10px; }
-.auth-divider { display: flex; align-items: center; gap: 10px; margin: 2px 0; }
-.auth-divider-line { flex: 1; height: 0.5px; background: var(--border2); }
-.auth-divider-text { font-size: 11px; color: var(--hint); }
-.auth-input { width: 100%; background: var(--surface2); border: 0.5px solid var(--border2); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; transition: border-color 0.12s; }
-.auth-input::placeholder { color: var(--hint); }
-.auth-input:focus { border-color: rgba(201,255,114,0.4); }
-.btn-google { width: 100%; background: var(--surface2); border: 0.5px solid var(--border2); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.12s; font-weight: 500; }
-.btn-google:hover { background: #2a2a2a; border-color: rgba(240,237,232,0.3); }
-.btn-primary { width: 100%; background: var(--accent); border: none; border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--accent-dark); cursor: pointer; font-weight: 500; transition: opacity 0.12s; }
-.btn-primary:hover { opacity: 0.88; }
-.btn-primary:active { transform: scale(0.98); }
-.auth-toggle { text-align: center; font-size: 13px; color: var(--muted); }
-.auth-toggle a { color: var(--accent); cursor: pointer; text-decoration: none; }
-.auth-toggle a:hover { text-decoration: underline; }
-.auth-error { font-size: 12px; color: #f09595; text-align: center; min-height: 16px; }
-
 /* ── Topbar ── */
 .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px 80px; border-bottom: 0.5px solid var(--border); flex-shrink: 0; -webkit-app-region: drag; }
 .app-name { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
 .app-name span { color: var(--accent); }
 .topbar-right { display: flex; align-items: center; gap: 10px; -webkit-app-region: no-drag; }
-/* count-badge and sync-dot removed */
-/* avatar/signout removed */
 
 /* ── Filters ── */
 .filter-row { display: flex; gap: 7px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none; flex-shrink: 0; -webkit-app-region: no-drag; }
@@ -118,21 +75,8 @@ html, body {
 /* ── Scroll area ── */
 .scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px 14px 14px; scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
 
-/* True 2-column masonry — like Pinterest/VSCO
-   Each column is independent so cards flow upward
-   with no gaps regardless of height differences */
-.grid {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-.grid-col {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-  min-width: 0;
-}
+.grid { display: flex; gap: 10px; align-items: flex-start; }
+.grid-col { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; }
 
 /* ── Cards ── */
 .card-wrap { position: relative; }
@@ -213,10 +157,6 @@ html, body {
 .overlay-del { margin-top: 14px; width: 100%; background: rgba(226,75,74,0.08); border: 0.5px solid rgba(226,75,74,0.25); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #f09595; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.12s; }
 .overlay-del:hover { background: rgba(226,75,74,0.15); }
 
-/* ── Loading ── */
-.loading-screen { display: flex; align-items: center; justify-content: center; height: 100dvh; flex-direction: column; gap: 16px; }
-.loading-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
-
 /* ── Toast ── */
 .toast { position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 0.5px solid var(--border2); border-radius: 20px; padding: 7px 16px; font-size: 13px; color: var(--text); z-index: 200; opacity: 0; transition: opacity 0.2s; white-space: nowrap; pointer-events: none; }
 .toast.show { opacity: 1; }
@@ -224,42 +164,11 @@ html, body {
 </head>
 <body>
 
-<!-- Loading -->
-<div class="loading-screen" id="loading-screen">
-  <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;">brain<span style="color:var(--accent)">dump</span></div>
-  <div class="loading-dot"></div>
-</div>
-
-<!-- Auth -->
-<div class="auth-screen" id="auth-screen" style="display:none;">
-  <div class="auth-logo">brain<span>dump</span></div>
-  <div class="auth-tagline">Capture everything.<br>Forget nothing.</div>
-  <div class="auth-card">
-    <button class="btn-google" id="btn-google">
-      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Continue with Google
-    </button>
-    <div class="auth-divider">
-      <div class="auth-divider-line"></div>
-      <span class="auth-divider-text">or</span>
-      <div class="auth-divider-line"></div>
-    </div>
-    <input class="auth-input" id="auth-email" type="email" placeholder="Email address" />
-    <input class="auth-input" id="auth-password" type="password" placeholder="Password" />
-    <div class="auth-error" id="auth-error"></div>
-    <button class="btn-primary" id="btn-signin">Sign in</button>
-    <div class="auth-toggle" id="auth-toggle-row">No account? <a id="toggle-auth">Create one</a></div>
-  </div>
-</div>
-
-<!-- Main app -->
-<div class="shell" id="main-screen" style="display:none;">
+<div class="shell" id="main-screen">
   <div class="app">
     <div class="topbar">
       <div class="app-name">brain<span>dump</span></div>
-      <div class="topbar-right">
-
-      </div>
+      <div class="topbar-right"></div>
     </div>
 
     <div class="filter-row" id="filter-row">
@@ -321,123 +230,31 @@ html, body {
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   CONFIG — paste your keys here
+   LOCAL STORAGE — no backend
+   Photos & audio are stored as
+   base64 data URLs so they
+   survive page reloads.
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-const SUPABASE_URL  = 'https://arkwpebjvqzrljwjblba.supabase.co'
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFya3dwZWJqdnF6cmxqd2pibGJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMTY3OTUsImV4cCI6MjA5MDg5Mjc5NX0.ZapKtGuumFBGq9MRtfFikJSbcnAv50DrQ3fooEizq4g'
-
-const { createClient } = supabase
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON)
-
-/* ── local backup ── */
 const LOCAL_KEY = 'braindump_ideas'
-function saveLocal(ideas) {
-  const toSave = ideas.map(i => ({ id: i.id, type: i.type, text: i.text, time: i.time, duration: i.duration, media_url: i.media_url }))
-  localStorage.setItem(LOCAL_KEY, JSON.stringify(toSave))
+
+function saveLocal() {
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(ideas))
 }
+
 function loadLocal() {
   try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]') } catch { return [] }
 }
 
 /* ── state ── */
-let ideas = []
-let currentUser = null
+let ideas = loadLocal()
 let activeFilter = 'all'
 let inputType = 'note'
 let mediaRecorder = null
 let audioChunks = []
 let recStart = 0
 let recTimerInterval = null
-let objectURLs = {}
-let isSignUp = false
-
-/* ── screens ── */
-function showScreen(name) {
-  document.getElementById('loading-screen').style.display = 'none'
-  document.getElementById('auth-screen').style.display   = name === 'auth' ? 'flex' : 'none'
-  document.getElementById('main-screen').style.display   = name === 'main' ? 'flex' : 'none'
-}
-
-/* ── auth ── */
-document.getElementById('toggle-auth').addEventListener('click', () => {
-  isSignUp = !isSignUp
-  document.getElementById('btn-signin').textContent = isSignUp ? 'Create account' : 'Sign in'
-  document.getElementById('toggle-auth').textContent = isSignUp ? 'Sign in instead' : 'Create one'
-  document.querySelector('#auth-toggle-row').childNodes[0].textContent = isSignUp ? 'Have an account? ' : 'No account? '
-  setAuthError('')
-})
-
-document.getElementById('btn-google').addEventListener('click', async () => {
-  const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } })
-  if (error) setAuthError(error.message)
-})
-
-document.getElementById('btn-signin').addEventListener('click', async () => {
-  const email    = document.getElementById('auth-email').value.trim()
-  const password = document.getElementById('auth-password').value
-  if (!email || !password) return setAuthError('Enter your email and password')
-  document.getElementById('btn-signin').textContent = '...'
-  const { error } = await sb.auth[isSignUp ? 'signUp' : 'signInWithPassword']({ email, password })
-  document.getElementById('btn-signin').textContent = isSignUp ? 'Create account' : 'Sign in'
-  if (error) return setAuthError(error.message)
-  if (isSignUp) setAuthError('Check your email to confirm your account!')
-})
-
-document.getElementById('auth-email').addEventListener('keydown', e => { if (e.key==='Enter') document.getElementById('auth-password').focus() })
-document.getElementById('auth-password').addEventListener('keydown', e => { if (e.key==='Enter') document.getElementById('btn-signin').click() })
-function setAuthError(msg) { document.getElementById('auth-error').textContent = msg }
-
-/* signout listener removed */
-
-/* ── user menu ── */
-function toggleMenu(force) { /* signout removed */ }
-function setUserUI(user) { /* signout removed */ }
-
-/* ── db ── */
-function setSyncing(on) { /* sync indicator removed */ }
-
-async function loadIdeas() {
-  const local = loadLocal()
-  if (local.length > 0) { ideas = local; renderGrid() }
-  setSyncing(true)
-  const { data, error } = await sb.from('ideas').select('*')
-    .eq('user_id', currentUser.id).order('created_at', { ascending: false })
-  setSyncing(false)
-  if (error) { toast('Offline — showing local data'); return }
-  ideas = data.map(r => ({ id: r.id, type: r.type, text: r.text, time: r.time, duration: r.duration, media_url: r.media_url }))
-  saveLocal(ideas); renderGrid()
-}
-
-async function saveIdeaToDB(idea) {
-  saveLocal(ideas)
-  setSyncing(true)
-  const { error } = await sb.from('ideas').upsert({
-    id: idea.id, user_id: currentUser.id,
-    type: idea.type, text: idea.text, time: idea.time,
-    duration: idea.duration || null, media_url: idea.media_url || null,
-    created_at: new Date(idea.id).toISOString(),
-  })
-  setSyncing(false)
-  if (error) toast('Cloud save failed — saved locally')
-}
-
-async function deleteIdeaFromDB(id) {
-  saveLocal(ideas)
-  setSyncing(true)
-  await sb.from('ideas').delete().eq('id', id).eq('user_id', currentUser.id)
-  setSyncing(false)
-}
-
-async function uploadMedia(file) {
-  const ext  = (file.name || 'file').split('.').pop()
-  const filePath = `${currentUser.id}/${Date.now()}.${ext}`
-  const { error } = await sb.storage.from('braindump-media').upload(filePath, file)
-  if (error) { toast('Upload failed'); return null }
-  return sb.storage.from('braindump-media').getPublicUrl(filePath).data.publicUrl
-}
 
 /* ── helpers ── */
 function ts() {
@@ -453,6 +270,16 @@ function toast(msg) {
   setTimeout(() => el.classList.remove('show'), 2200)
 }
 
+/* ── convert file/blob to base64 data URL for persistent storage ── */
+function toDataURL(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  })
+}
+
 /* ── input type ── */
 function setInputType(t) {
   inputType = t
@@ -465,48 +292,47 @@ document.getElementById('btn-note').addEventListener('click', () => setInputType
 document.getElementById('btn-idea').addEventListener('click', () => setInputType('idea'))
 
 /* ── add text ── */
-async function addText() {
+function addText() {
   const txt = document.getElementById('txt-input').value.trim()
   if (!txt) return
   const idea = { id: Date.now(), type: inputType, text: txt, time: ts() }
-  ideas.unshift(idea); document.getElementById('txt-input').value = ''
-  renderGrid(); await saveIdeaToDB(idea); toast('Saved!')
+  ideas.unshift(idea)
+  document.getElementById('txt-input').value = ''
+  saveLocal()
+  renderGrid()
+  toast('Saved!')
 }
 document.getElementById('send-btn').addEventListener('click', addText)
 document.getElementById('txt-input').addEventListener('keydown', e => { if (e.key==='Enter') addText() })
 
-/* ── add photo ── */
+/* ── add photo — stored as base64 ── */
 document.getElementById('file-input').addEventListener('change', async e => {
   const file = e.target.files[0]; if (!file) return
-  const id = Date.now()
-  const tempUrl = URL.createObjectURL(file); objectURLs[id] = tempUrl
-  const idea = { id, type: 'photo', text: file.name.replace(/\.[^.]+$/,'') || 'Photo', time: ts(), media_url: tempUrl }
-  ideas.unshift(idea); renderGrid(); e.target.value = ''
-  const publicUrl = await uploadMedia(file)
-  if (publicUrl) { idea.media_url = publicUrl; URL.revokeObjectURL(tempUrl); delete objectURLs[id]; renderGrid() }
-  await saveIdeaToDB(idea); toast('Photo saved!')
+  toast('Saving photo…')
+  try {
+    const dataUrl = await toDataURL(file)
+    const idea = { id: Date.now(), type: 'photo', text: file.name.replace(/\.[^.]+$/,'') || 'Photo', time: ts(), media_url: dataUrl }
+    ideas.unshift(idea)
+    saveLocal()
+    renderGrid()
+    toast('Photo saved!')
+  } catch {
+    toast('Could not save photo')
+  }
+  e.target.value = ''
 })
 document.getElementById('btn-photo').addEventListener('click', () => document.getElementById('file-input').click())
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   FIX 1 — AUDIO
-   Root causes:
-   1. CSP was blocking blob: URLs for media playback
-   2. Electron needs MediaStream feature flag (set in main.js)
-   3. Added explicit error logging so failures are visible
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ── audio — stored as base64 ── */
 async function startAudio() {
-  // Check if mediaDevices is available at all
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     toast('Microphone not available in this environment')
     return
   }
-
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
     audioChunks = []
 
-    // Pick best supported format
     const mimeType = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/ogg']
       .find(t => MediaRecorder.isTypeSupported(t)) || ''
 
@@ -522,30 +348,22 @@ async function startAudio() {
       const dur      = Math.round((Date.now() - recStart) / 1000)
       const blobType = audioChunks[0].type || mimeType || 'audio/webm'
       const blob     = new Blob(audioChunks, { type: blobType })
-      const id       = Date.now()
 
-      // Create object URL for immediate local playback
-      const tempUrl = URL.createObjectURL(blob)
-      objectURLs[id] = tempUrl
-
-      const idea = { id, type: 'audio', duration: dur, text: 'Voice memo', time: ts(), media_url: tempUrl }
-      ideas.unshift(idea); renderGrid()
+      toast('Saving audio…')
+      try {
+        const dataUrl = await toDataURL(blob)
+        const idea = { id: Date.now(), type: 'audio', duration: dur, text: 'Voice memo', time: ts(), media_url: dataUrl }
+        ideas.unshift(idea)
+        saveLocal()
+        renderGrid()
+        toast('Audio saved!')
+      } catch {
+        toast('Could not save audio')
+      }
 
       document.getElementById('rec-indicator').style.display = 'none'
       document.getElementById('btn-audio').classList.remove('recording')
       document.getElementById('audio-btn-label').textContent = 'Record Audio'
-
-      // Upload to Supabase in background
-      const ext       = blobType.includes('ogg') ? 'ogg' : 'webm'
-      const audioFile = new File([blob], `audio_${id}.${ext}`, { type: blobType })
-      const publicUrl = await uploadMedia(audioFile)
-      if (publicUrl) {
-        idea.media_url = publicUrl
-        URL.revokeObjectURL(tempUrl)
-        delete objectURLs[id]
-      }
-      await saveIdeaToDB(idea)
-      toast('Audio saved!')
     }
 
     recStart = Date.now()
@@ -560,7 +378,7 @@ async function startAudio() {
   } catch (err) {
     console.error('Audio error:', err)
     if (err.name === 'NotAllowedError') {
-      toast('Mic access denied — allow in System Settings > Privacy > Microphone')
+      toast('Mic access denied — check System Settings > Privacy > Microphone')
     } else if (err.name === 'NotFoundError') {
       toast('No microphone found')
     } else {
@@ -582,13 +400,14 @@ document.getElementById('rec-stop').addEventListener('click', stopAudio)
 /* ── delete ── */
 function deleteIdea(id) {
   ideas = ideas.filter(i => i.id !== id)
-  if (objectURLs[id]) { URL.revokeObjectURL(objectURLs[id]); delete objectURLs[id] }
+  saveLocal()
   document.getElementById('overlay').classList.remove('open')
-  renderGrid(); deleteIdeaFromDB(id); toast('Deleted')
+  renderGrid()
+  toast('Deleted')
 }
 
-/* ── detail ── */
-async function openDetail(id) {
+/* ── detail overlay ── */
+function openDetail(id) {
   const idea = ideas.find(i => i.id === id); if (!idea) return
   let html = ''
   if (idea.type==='photo' && idea.media_url) html += `<img class="overlay-img" src="${idea.media_url}" />`
@@ -603,26 +422,14 @@ async function openDetail(id) {
   html += `<button class="overlay-del" onclick="deleteIdea(${id})">Delete this idea</button>`
   document.getElementById('overlay-body').innerHTML = html
   document.getElementById('overlay').classList.add('open')
-  document.getElementById('overlay-edit')?.addEventListener('input', async e => {
+  document.getElementById('overlay-edit')?.addEventListener('input', e => {
     const i = ideas.find(x => x.id===id)
-    if (i) { i.text = e.target.value; await saveIdeaToDB(i); renderGrid() }
+    if (i) { i.text = e.target.value; saveLocal(); renderGrid() }
   })
 }
 document.getElementById('overlay-close').addEventListener('click', () => document.getElementById('overlay').classList.remove('open'))
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   FIX 2 — RENDER GRID
-   Instead of CSS grid (which leaves gaps between
-   mixed-height cards), we build rows manually in JS:
-   - Wide cards (audio, note, idea) get their own full row
-   - Narrow cards (photo) are paired into rows of 2
-   - A lone narrow card at the end gets its own row
-   This way there are never any empty grid cells.
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-function isWide(type) {
-  return type === 'audio' || type === 'note' || type === 'idea'
-}
-
+/* ── render grid ── */
 function makeCardEl(idea) {
   const wrap = document.createElement('div'); wrap.className = 'card-wrap'
   const card = document.createElement('div'); card.className = 'card'
@@ -653,7 +460,6 @@ function makeCardEl(idea) {
 function renderGrid() {
   const filtered = activeFilter === 'all' ? ideas : ideas.filter(i => i.type === activeFilter)
   const grid = document.getElementById('grid')
-  // count badge removed
 
   if (filtered.length === 0) {
     grid.innerHTML = `<div class="empty">Nothing here yet.<br>Start dumping your thoughts below.</div>`
@@ -661,19 +467,14 @@ function renderGrid() {
   }
 
   grid.innerHTML = ''
-
-  // True masonry: two independent columns
-  // Cards flow into the shorter column each time — no gaps ever
   const colL = document.createElement('div'); colL.className = 'grid-col'
   const colR = document.createElement('div'); colR.className = 'grid-col'
   grid.appendChild(colL); grid.appendChild(colR)
 
-  // Track approximate height of each column using card type as proxy
   let heightL = 0, heightR = 0
 
   filtered.forEach(idea => {
     const wrap = makeCardEl(idea)
-    // Estimate card height for column balancing
     const h = idea.type === 'photo' ? 200
             : idea.type === 'audio' ? 110
             : idea.type === 'note'  ? Math.min(40 + idea.text.length * 0.6, 180)
@@ -681,11 +482,9 @@ function renderGrid() {
             : 120
 
     if (heightL <= heightR) {
-      colL.appendChild(wrap)
-      heightL += h + 10
+      colL.appendChild(wrap); heightL += h + 10
     } else {
-      colR.appendChild(wrap)
-      heightR += h + 10
+      colR.appendChild(wrap); heightR += h + 10
     }
   })
 }
@@ -698,13 +497,7 @@ document.getElementById('filter-row').addEventListener('click', e => {
 })
 
 /* ── boot ── */
-sb.auth.onAuthStateChange(async (event, session) => {
-  if (session?.user) {
-    currentUser = session.user; setUserUI(currentUser)
-    showScreen('main'); await loadIdeas()
-  } else { showScreen('auth') }
-})
-;(async () => { const { data: { session } } = await sb.auth.getSession(); if (!session) showScreen('auth') })()
+renderGrid()
 </script>
 </body>
 </html>
